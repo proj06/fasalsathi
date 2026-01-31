@@ -1,0 +1,259 @@
+/* --- 1. Global Reset & Variables --- */
+:root {
+    --forest: #1b3022;
+    --sprout: #88b04b;
+    --earth: #4e342e;
+    --cream: #f8faf8;
+    --white: #ffffff;
+    --gold: #f2bb66;
+    --danger: #c62828;
+    --success: #2e7d32;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--cream);
+    color: var(--forest);
+    line-height: 1.6;
+}
+
+/* --- 2. Navigation (Section 1) --- */
+.glass-nav {
+    background: var(--white);
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--forest);
+}
+
+.lang-pill a {
+    text-decoration: none;
+    color: var(--forest);
+    font-weight: 600;
+    padding: 0 5px;
+}
+
+/* --- 3. Hero Section (Section 1) --- */
+.hero-polished {
+    background: linear-gradient(rgba(27, 48, 34, 0.85), rgba(27, 48, 34, 0.85)), 
+                url('https://images.unsplash.com/photo-1500382017468-9049fee74a62?auto=format&fit=crop&w=1200&q=80');
+    background-size: cover;
+    background-position: center;
+    padding: 100px 5%;
+    color: var(--white);
+    text-align: center;
+    border-radius: 0 0 40px 40px;
+}
+
+.hero-polished h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.hero-icons {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.hero-icons span {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+}
+
+.btn-leaf {
+    background-color: var(--sprout);
+    color: var(--white);
+    padding: 15px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.btn-leaf:hover {
+    transform: scale(1.05);
+}
+
+/* --- 4. Dashboard Layout --- */
+.main-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+    padding: 40px 5%;
+}
+
+.card {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid #f0f0f0;
+}
+
+.card h3 {
+    margin-bottom: 1.5rem;
+    color: var(--forest);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- 5. Form Styling (Section 2) --- */
+.grid-form input, .grid-form select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.btn-submit {
+    background: var(--forest);
+    color: var(--white);
+    border: none;
+    padding: 15px;
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* --- 6. Results & Profit (Section 3) --- */
+.result-card {
+    border: 2px solid var(--sprout);
+    background: #f9fff9;
+}
+
+.highlight {
+    color: var(--success);
+}
+
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.profit-box {
+    background: var(--forest);
+    color: var(--white);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.profit-box .price {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--sprout);
+}
+
+/* Risk Meter (Image 2 Requirement) */
+.risk-container {
+    margin-top: 15px;
+}
+
+.risk-bar {
+    height: 12px;
+    background: #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.risk-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), var(--gold), var(--danger));
+    transition: width 0.8s ease-in-out;
+}
+
+/* --- 7. Soil & Market (Section 5 & 6) --- */
+.soil-grid {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.soil-info {
+    font-size: 0.9rem;
+    background: #f1f8e9;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.tip-box {
+    background: #fff9c4;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    border-left: 4px solid var(--gold);
+}
+
+.price-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Market Trend Arrows (Image 6 Requirement) */
+.price-up { color: var(--success); font-weight: bold; }
+.price-up::after { content: ' ↑'; }
+
+.price-down { color: var(--danger); font-weight: bold; }
+.price-down::after { content: ' ↓'; }
+
+/* --- 8. Alerts & Footer (Section 4 & 8) --- */
+.alert-banner {
+    background: #fff3e0;
+    border-left: 8px solid #ff9800;
+    padding: 20px 5%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.footer-schemes {
+    background: var(--forest);
+    color: var(--white);
+    padding: 40px 5%;
+    text-align: center;
+}
+
+.scheme-list {
+    margin: 15px 0;
+    opacity: 0.8;
+}
+
+.footer-schemes p {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
