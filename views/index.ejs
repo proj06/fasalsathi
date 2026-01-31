@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fasal Sathi</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+:root{
+ --green1:#1b5e20;
+ --green2:#2e7d32;
+ --green3:#66bb6a;
+ --bg:#f4fff6;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Segoe UI',sans-serif;background:var(--bg);scroll-behavior:smooth;}
+nav{
+ position:fixed;top:0;width:100%;z-index:1000;
+ background:rgba(255,255,255,0.7);backdrop-filter:blur(10px);
+ display:flex;justify-content:space-between;align-items:center;
+ padding:12px 30px;
+}
+nav .logo{font-size:1.3rem;font-weight:700;color:var(--green1)}
+nav a{margin:0 10px;text-decoration:none;color:#333;font-weight:500}
+section{padding:90px 8% 70px 8%;}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+.hero h1{font-size:2.8rem;color:var(--green1)}
+.hero p{font-size:1.1rem;color:#444}
+.hero .icons{display:flex;gap:20px;margin:20px 0}
+.hero .icon-card{background:white;padding:15px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.08);text-align:center;min-width:140px}
+.hero button{
+ padding:15px 30px;border:none;border-radius:30px;
+ background:linear-gradient(135deg,var(--green2),var(--green3));
+ color:white;font-size:1rem;cursor:pointer
+}
+.card{background:white;border-radius:18px;padding:25px;margin-top:25px;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+input,select{padding:12px;border-radius:10px;border:1px solid #ccc;width:100%}
+.btn{background:var(--green2);color:white;border:none;padding:14px;border-radius:12px;cursor:pointer}
+.progress{height:10px;background:#eee;border-radius:10px;overflow:hidden}
+.progress div{height:100%;background:linear-gradient(90deg,#66bb6a,#2e7d32);width:0%}
+.alert{padding:15px;border-radius:12px;background:#ffebee;color:#c62828}
+.price-up{color:#2e7d32}.price-down{color:#c62828}
+footer{background:#1b5e20;color:white;padding:40px;text-align:center}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<nav>
+ <div class="logo">🌿 Fasal Sathi</div>
+ <div>
+  <a href="#home">Home</a>
+  <a href="#crop">Crop</a>
+  <a href="#profit">Profit</a>
+  <a href="#weather">Weather</a>
+  <a href="#soil">Soil</a>
+  <a href="#market">Market</a>
+  <a href="#community">Community</a>
+  <a href="#gov">Schemes</a>
+ </div>
+</nav>
+
+<!-- HOME -->
+<section id="home">
+ <div class="hero">
+  <div>
+   <h1>Your Smart Farming Companion for Higher Yield & Profit</h1>
+   <p>AI powered farming support system for modern Indian agriculture</p>
+   <div class="icons">
+    <div class="icon-card">🌱<br>Soil-based crop</div>
+    <div class="icon-card">📊<br>Profit prediction</div>
+    <div class="icon-card">🌦<br>Weather + market</div>
+   </div>
+   <button onclick="document.getElementById('crop').scrollIntoView()">Check Best Crop for My Land</button>
+  </div>
+  <div>
+   <img src="https://cdn-icons-png.flaticon.com/512/2909/2909764.png" width="100%">
+  </div>
+ </div>
+</section>
+
+<!-- CROP -->
+<section id="crop">
+ <h2>Crop Recommendation</h2>
+ <div class="card">
+  <div class="grid">
+    <input id="land" placeholder="Land Area">
+    <input id="n" placeholder="Nitrogen (N)">
+    <input id="p" placeholder="Phosphorus (P)">
+    <input id="k" placeholder="Potassium (K)">
+    <input id="ph" placeholder="pH">
+    <select><option>Low Water</option><option>Medium Water</option><option>High Water</option></select>
+    <select><option>Kharif</option><option>Rabi</option><option>Zaid</option></select>
+  </div>
+  <button class="btn" style="margin-top:20px" onclick="analyzeCrop()">Analyze</button>
+ </div>
+
+ <div class="card">
+  <h3>Best Crop: <span id="bestCrop">-</span></h3>
+  <p>Expected Yield: <span id="expYield">-</span></p>
+  <p>Estimated Profit: <span id="profit">-</span></p>
+  <p>Risk Level: <span id="riskText">-</span></p>
+  <div class="progress"><div id="riskBar"></div></div>
+ </div>
+</section>
+
+<!-- PROFIT -->
+<section id="profit">
+ <h2>Profitability Calculator</h2>
+ <div class="card grid">
+  <input id="pland" placeholder="Land Area">
+  <input id="seed" placeholder="Seed Cost">
+  <input id="fert" placeholder="Fertilizer Cost">
+  <input id="lab" placeholder="Labour Cost">
+  <select id="pcrop">
+    <option value="wheat">Wheat</option>
+    <option value="rice">Rice</option>
+    <option value="mustard">Mustard</option>
+  </select>
+ </div>
+ <button class="btn" style="margin-top:20px" onclick="calcProfit()">Calculate</button>
+
+ <div class="card">
+  <p>Expected Yield: <span id="pyield">-</span></p>
+  <p>Total Income: <span id="pincome">-</span></p>
+  <p><b>Net Profit: <span id="pprofit">-</span></b></p>
+ </div>
+</section>
+
+<!-- WEATHER -->
+<section id="weather">
+ <h2>Weather & Alerts</h2>
+ <div class="card grid">
+  <div>Mon ☀</div><div>Tue 🌤</div><div>Wed 🌧</div><div>Thu 🌦</div><div>Fri ☀</div><div>Sat 🌤</div><div>Sun 🌧</div>
+ </div>
+ <div class="alert" id="weatherAlert"></div>
+</section>
+
+<!-- SOIL -->
+<section id="soil">
+ <h2>Soil Health Guide</h2>
+ <div class="card">
+  <p><b>N:</b> Growth & leaves</p>
+  <p><b>P:</b> Roots</p>
+  <p><b>K:</b> Immunity</p>
+  <p><b>pH:</b> Nutrient absorption</p>
+  <p>Tip: Low nitrogen? Use green manure.</p>
+ </div>
+</section>
+
+<section id="market">
+ <h2>Market Prices</h2>
+ <div class="card" id="marketData"></div>
+</section>
+
+<section id="community">
+ <h2>Community & Learning</h2>
+ <div class="card">
+  <p>Farmer success stories</p>
+  <p>Nearby farmers grew this crop</p>
+  <p>Simple farming tips</p>
+ </div>
+</section>
+
+<section id="gov">
+ <h2>Government Schemes</h2>
+ <div class="card">
+  <p>PM-Kisan</p>
+  <p>Soil Health Card</p>
+  <p>Crop Insurance</p>
+  <p>Subsidies</p>
+ </div>
+</section>
+
+<footer>
+ Fasal Sathi – Smart Agriculture Platform
+</footer>
+
+<script>
+const cropDB = {
+  wheat:{yield:45, price:2275, cost:5000, risk:"Low", riskVal:20},
+  rice:{yield:38, price:2200, cost:6000, risk:"Medium", riskVal:50},
+  mustard:{yield:12, price:5450, cost:4500, risk:"Medium", riskVal:55}
+};
+
+const marketDB = {
+  wheat:{price:2275, trend:"up"},
+  rice:{price:2150, trend:"down"},
+  mustard:{price:5400, trend:"up"}
+};
+
+function analyzeCrop(){
+  const ph = Number(document.getElementById("ph").value);
+  const land = Number(document.getElementById("land").value);
+
+  let crop;
+  if(ph > 7.5) crop = "mustard";
+  else if(ph < 6.5) crop = "rice";
+  else crop = "wheat";
+
+  const data = cropDB[crop];
+  const yieldTotal = data.yield * land;
+  const revenue = yieldTotal * data.price;
+  const profit = revenue - (data.cost * land);
+
+  document.getElementById("bestCrop").innerText = crop.toUpperCase();
+  document.getElementById("expYield").innerText = yieldTotal+" quintals";
+  document.getElementById("profit").innerText = "₹"+profit.toLocaleString("en-IN");
+  document.getElementById("riskText").innerText = data.risk;
+  document.getElementById("riskBar").style.width = data.riskVal+"%";
+}
+
+function calcProfit(){
+  const land = Number(document.getElementById("pland").value);
+  const seed = Number(document.getElementById("seed").value);
+  const fert = Number(document.getElementById("fert").value);
+  const lab = Number(document.getElementById("lab").value);
+  const crop = document.getElementById("pcrop").value;
+
+  const data = cropDB[crop];
+  const cost = (seed+fert+lab)*land;
+  const yieldTotal = data.yield*land;
+  const income = yieldTotal*data.price;
+  const profit = income - cost;
+
+  document.getElementById("pyield").innerText = yieldTotal+" quintals";
+  document.getElementById("pincome").innerText = "₹"+income.toLocaleString("en-IN");
+  document.getElementById("pprofit").innerText = "₹"+profit.toLocaleString("en-IN");
+}
+
+function loadWeather(){
+  const alerts = [
+    "Heavy rain expected in 3 days – avoid sowing now",
+    "High temperature expected – increase irrigation",
+    "Storm alert – protect crops"
+  ];
+  document.getElementById("weatherAlert").innerText = alerts[Math.floor(Math.random()*alerts.length)];
+}
+
+function loadMarket(){
+  let html = "";
+  for(let crop in marketDB){
+    const c = marketDB[crop];
+    html += `<p>${crop.toUpperCase()}: ₹${c.price} ${c.trend=="up"?"⬆":"⬇"}</p>`;
+  }
+  document.getElementById("marketData").innerHTML = html;
+}
+
+loadWeather();
+loadMarket();
+</script>
+
+</body>
+</html>
