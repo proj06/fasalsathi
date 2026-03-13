@@ -1,124 +1,66 @@
-require('dotenv').config();
 const express = require('express');
-const i18n = require('i18n');
-const path = require('path');
-
-const authRoutes = require('./routes/auth'); 
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 const app = express();
+app.use(express.json());
+app.use(express.static('public'));
 
 
-i18n.configure({
-  locales: ['en', 'hi', 'pa'],
-  directory: path.join(__dirname, 'locales'),
-  defaultLocale: 'en',
-  queryParameter: 'lang',
-  cookie: 'lang'
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("Connected to MongoDB"))
+    .catch(err => console.error(err));
+
+
+const schemeSchema = new mongoose.Schema({
+    name: String,
+    description: String,
+    lang: String
 });
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({ extended: true }));
-app.use(i18n.init);
+const Scheme = mongoose.model('Scheme', schemeSchema);
 
 
-
-
-
-
-app.use('/auth', authRoutes);   
-
-
-app.get('/login', (req, res) => {
-  res.render('login', { error: null, success: null });
-});
-
-app.get('/register', (req, res) => {
-  res.render('register', { error: null });
+app.get('/api/schemes/:lang', async (req, res) => {
+    const schemes = await Scheme.find({ lang: req.params.lang });
+    res.json(schemes);
 });
 
 
-app.get('/', (req, res) => {
-  res.render('index', { result: null, error: null });
-});
 
+const schemes = [
+    { name: "CM Punjab Farmer Welfare 2026", desc: "Monthly financial aid & subsidies on seeds.", lang: "en" },
+    { name: "Green Tractor Scheme Phase-III", desc: "₹5 lakh subsidy on 50-65 HP tractors.", lang: "en" },
+    { name: "ਸੀਐਮ ਪੰਜਾਬ ਕਿਸਾਨ ਪੈਕੇਜ", desc: "ਬੀਜਾਂ ਅਤੇ ਖਾਦਾਂ 'ਤੇ ਸਬਸਿਡੀ।", lang: "pa" }
+];
 
-app.post('/recommend', (req, res) => {
-  try {
-    let { n, p, k, ph, landArea } = req.body;
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
 
-    if (!n || !p || !k || !ph || !landArea) {
-      return res.render('index', { 
-        result: null, 
-        error: "All fields are required" 
-      });
+app.post('/api/ai-chat', async (req, res) => {
+    const { message, lang } = req.body;
+    
+    if (!process.env.GEMINI_KEY) {
+        return res.status(500).json({ response: "Error: GEMINI_KEY is missing in .env" });
     }
 
-    n = Number(n);
-    p = Number(p);
-    k = Number(k);
-    ph = Number(ph);
-    landArea = Number(landArea);
-
-    let cropData;
-
-    if (ph > 7.5) {
-      cropData = {
-        crop: "Mustard (Sarson)",
-        yield: 12 * landArea,
-        price: 5450,
-        risk: "Medium",
-        riskPercent: 55,
-        cost: 4500 * landArea
-      };
-    } 
-    else if (ph < 6.5) {
-      cropData = {
-        crop: "Rice (Paddy)",
-        yield: 38 * landArea,
-        price: 2200,
-        risk: "Medium",
-        riskPercent: 50,
-        cost: 6000 * landArea
-      };
-    } 
-    else {
-      cropData = {
-        crop: "Wheat (Kanak)",
-        yield: 45 * landArea,
-        price: 2275,
-        risk: "Low",
-        riskPercent: 20,
-        cost: 5000 * landArea
-      };
+    try {
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const prompt = `You are Fasal Sathi, an expert in Indian agriculture. Only answer requests related to agriculture and derivatives. Do not indulge in personal talks if user prompts. If user asks about the website, tell them its related to agriculture and helping farmers according to your own words. Answer the following question briefly in ${lang}: ${message}`;
+        
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text(); 
+        
+        res.json({ response: responseText });
+    } catch (err) {
+        console.error("Gemini Error:", err);
+        res.status(500).json({ response: "I'm having trouble connecting. Try again!" });
     }
-
-    const revenue = cropData.yield * cropData.price;
-    const profit = revenue - cropData.cost;
-
-    res.render('index', {
-      error: null,
-      result: {
-        crop: cropData.crop,
-        yield: cropData.yield,
-        price: cropData.price,
-        risk: cropData.risk,
-        riskPercent: cropData.riskPercent,
-        profit: profit.toLocaleString('en-IN')
-      }
-    });
-
-  } catch (err) {
-    console.error(err);
-    res.render('index', { 
-      result: null, 
-      error: "Internal server error" 
-    });
-  }
 });
 
-app.listen(3000, () => {
-  console.log("🌾 Fasal Sathi running at http://localhost:3000")
+app.get('/api/schemes/:lang', (req, res) => {
+    const filtered = schemes.filter(s => s.lang === req.params.lang);
+    res.json(filtered);
 });
+
+const PORT = 3000;
+app.listen(PORT, () => console.log(`Server at http://localhost:${PORT}`));
