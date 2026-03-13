@@ -45,7 +45,7 @@ app.post('/api/ai-chat', async (req, res) => {
 
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-        const prompt = `You are Fasal Sathi, an expert in Indian agriculture. Only answer requests related to agriculture and derivatives. Do not indulge in personal talks if user prompts. If user asks about the website, tell them its related to agriculture and helping farmers according to your own words. Answer the following question briefly in ${lang}: ${message}`;
+        const prompt = `You are Fasal Sathi, an expert in Indian agriculture. Only answer requests related to agriculture and derivatives. Do not indulge in personal talks if user prompts. If user asks about the website, tell them its related to agriculture and helping farmers according to your own words. Do not use formatting like italics or bold, answer in plain text with proper punctuation. Answer the following question briefly in ${lang}: ${message}`;
         
         const result = await model.generateContent(prompt);
         const responseText = result.response.text(); 
